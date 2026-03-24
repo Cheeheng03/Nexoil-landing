@@ -12,7 +12,6 @@ function CountUp({ value }: { value: string }) {
   useEffect(() => {
     if (!inView) return;
 
-    // Handle special cases
     if (value === "24/7") {
       const controls = animate(0, 24, {
         duration: 1.5,
@@ -31,7 +30,6 @@ function CountUp({ value }: { value: string }) {
       return () => controls.stop();
     }
 
-    // Parse the numeric part and suffix (e.g. "20+" -> 20, "+")
     const match = value.match(/^([\d.]+)(.*)/);
     if (!match) return;
 
@@ -84,16 +82,150 @@ function AnimatedBar({ label, value, index }: { label: string; value: number; in
       <div className="h-2 bg-white/[0.08] rounded-full overflow-hidden relative">
         <motion.div
           style={{ width }}
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#ffffff] to-[#34d9c3] rounded-full"
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#ffffff] to-[#cccccc] rounded-full"
         />
       </div>
     </motion.div>
   );
 }
 
-export default function Stats() {
+const CURSOR_SIZE = 120;
+
+function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | null> }) {
+  const mouseX = useMotionValue(-999);
+  const mouseY = useMotionValue(-999);
+  const [visible, setVisible] = useState(false);
+
+  const x = useSpring(mouseX, { stiffness: 500, damping: 40, mass: 0.3 });
+  const y = useSpring(mouseY, { stiffness: 500, damping: 40, mass: 0.3 });
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    let clientX = -999;
+    let clientY = -999;
+
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      const px = clientX - rect.left;
+      const py = clientY - rect.top;
+      mouseX.set(px);
+      mouseY.set(py);
+
+      // Check if cursor is inside section bounds
+      const inside =
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom;
+      setVisible(inside && clientX > 0);
+    };
+
+    // Track mouse globally at all times
+    const onMove = (e: MouseEvent) => {
+      clientX = e.clientX;
+      clientY = e.clientY;
+      update();
+    };
+
+    const onScroll = () => update();
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [sectionRef, mouseX, mouseY]);
+
+  const clipPath = useTransform(
+    [x, y],
+    ([cx, cy]: number[]) => `circle(${CURSOR_SIZE / 2}px at ${cx}px ${cy}px)`
+  );
+
   return (
-    <section className="bg-[#0f1115] text-white relative overflow-hidden">
+    <motion.div
+      className="absolute inset-0 z-30 pointer-events-none"
+      style={{
+        clipPath,
+        opacity: visible ? 1 : 0,
+        transition: "opacity 0.2s",
+        backgroundColor: "white",
+      }}
+    >
+      {/* Inverted content clone */}
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 pt-28 md:pt-36 pb-16">
+        <p className="text-[13px] font-medium uppercase tracking-widest text-black/60 mb-6">
+          {statsContent.sectionLabel}
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24">
+          <h2 className="text-[clamp(2.2rem,5vw,4rem)] font-semibold leading-[1.1] tracking-tight text-black whitespace-pre-line">
+            {statsContent.heading}
+          </h2>
+          <p className="text-black/50 text-base md:text-lg leading-relaxed pt-2">
+            {statsContent.description}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 border-t border-b border-black/[0.08] py-12">
+          {statsContent.stats.map((stat) => (
+            <div key={stat.label} className="flex flex-col gap-2">
+              <span className="text-[clamp(2.5rem,5vw,4rem)] font-bold tracking-tight text-black">
+                {stat.value}
+              </span>
+              <span className="text-xs font-medium uppercase tracking-widest text-black/40">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {statsContent.capabilities.map((cap) => (
+            <div key={cap.title} className="rounded-xl border border-black/[0.08] bg-black/[0.03] p-6">
+              <div className="w-8 h-8 rounded-lg bg-black/10 flex items-center justify-center mb-4">
+                <div className="w-2 h-2 rounded-full bg-black" />
+              </div>
+              <h3 className="text-sm font-semibold text-black mb-2">{cap.title}</h3>
+              <p className="text-black/50 text-xs leading-relaxed">{cap.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 py-12 pb-28 md:pb-36">
+        <h3 className="text-lg font-semibold text-black mb-8">Our Track Record</h3>
+        <div className="flex flex-col gap-6">
+          {barData.map((bar) => (
+            <div key={bar.label} className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-black/60">{bar.label}</span>
+                <span className="text-sm font-medium text-black">{bar.value}%</span>
+              </div>
+              <div className="h-2 bg-black/[0.08] rounded-full overflow-hidden relative">
+                <div className="absolute inset-y-0 left-0 bg-black rounded-full" style={{ width: `${bar.value}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function Stats() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  return (
+    <section ref={sectionRef} className="bg-[#0f1115] text-white relative overflow-hidden cursor-none">
+      {/* X-ray cursor */}
+      <XrayCursor sectionRef={sectionRef} />
+
       {/* Subtle gradient accent */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#ffffff]/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
@@ -142,7 +274,7 @@ export default function Stats() {
         </div>
       </div>
 
-      {/* Stats grid — large teal numbers */}
+      {/* Stats grid */}
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 border-t border-b border-white/[0.06] py-12">
           {statsContent.stats.map((stat, i) => (
