@@ -105,13 +105,12 @@ function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | 
 
     let clientX = -999;
     let clientY = -999;
+    let wasHidden = true;
 
     const update = () => {
       const rect = el.getBoundingClientRect();
       const px = clientX - rect.left;
       const py = clientY - rect.top;
-      mouseX.set(px);
-      mouseY.set(py);
 
       // Check if cursor is inside section bounds
       const inside =
@@ -119,7 +118,18 @@ function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | 
         clientX <= rect.right &&
         clientY >= rect.top &&
         clientY <= rect.bottom;
-      setVisible(inside && clientX > 0);
+      const nowVisible = inside && clientX > 0;
+
+      if (nowVisible && wasHidden) {
+        // Jump springs instantly to avoid animating from old position
+        x.jump(px);
+        y.jump(py);
+      }
+
+      mouseX.set(px);
+      mouseY.set(py);
+      wasHidden = !nowVisible;
+      setVisible(nowVisible);
     };
 
     // Track mouse globally at all times
@@ -129,15 +139,33 @@ function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | 
       update();
     };
 
-    const onScroll = () => update();
+    const onScroll = () => {
+      if (!document.hasFocus()) return;
+      update();
+    };
+
+    const hide = () => {
+      wasHidden = true;
+      setVisible(false);
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) hide();
+    };
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("blur", hide);
+    document.addEventListener("mouseleave", hide);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("blur", hide);
+      document.removeEventListener("mouseleave", hide);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [sectionRef, mouseX, mouseY]);
+  }, [sectionRef, mouseX, mouseY, x, y]);
 
   const clipPath = useTransform(
     [x, y],
@@ -148,9 +176,7 @@ function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | 
     <motion.div
       className="absolute inset-0 z-30 pointer-events-none"
       style={{
-        clipPath,
-        opacity: visible ? 1 : 0,
-        transition: "opacity 0.2s",
+        clipPath: visible ? clipPath : "circle(0px at -999px -999px)",
         backgroundColor: "white",
       }}
     >
