@@ -4,11 +4,11 @@ export const siteConfig = {
   tagline: "Malaysia's Leading Industrial Fuel Partner",
   description:
     "Nexoil Distribution Sdn Bhd powers Malaysia's industries with premium petroleum products, reliable logistics, and two decades of fuel distribution expertise.",
-  phone: "+6016-7059 399",
-  phone2: "+6019-3053 999",
+  phone: "+603-8921 4455",
+  phone2: "+6012-6188 773",
   email: "info@nexoil.com.my",
   address:
-    "Lot 2987 Jalan Kesang Tanjong Agas 84000 Tangkak Johor",
+    "No. 15 Jalan Industri Utama 42100 Klang Selangor",
   website: "https://nexoil.com.my",
 };
 

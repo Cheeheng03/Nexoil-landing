@@ -96,8 +96,8 @@ export default function Industries() {
           >
             <div className="flex flex-col gap-6">
               {/* Icon */}
-              <div className="w-10 h-10 rounded-xl bg-[#2ABFAB]/10 flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2ABFAB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-10 h-10 rounded-xl bg-[#000000]/10 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5z" />
                   <path d="M2 17l10 5 10-5" />
                   <path d="M2 12l10 5 10-5" />
@@ -118,7 +118,7 @@ export default function Industries() {
                     viewport={{ once: true }}
                     className="flex items-start gap-3"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#2ABFAB] mt-2 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#000000] mt-2 flex-shrink-0" />
                     <div>
                       <span className="text-sm font-semibold text-black">{item.title}</span>
                       <p className="text-black/40 text-[13px] leading-relaxed mt-0.5">
@@ -131,7 +131,7 @@ export default function Industries() {
 
               <a
                 href="#contact"
-                className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[#2ABFAB] hover:text-[#24a999] transition-colors w-fit group"
+                className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-[#000000] hover:text-[#333333] transition-colors w-fit group"
               >
                 Learn more
                 <svg

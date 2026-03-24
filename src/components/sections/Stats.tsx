@@ -31,12 +31,12 @@ function AnimatedBar({ label, value, index }: { label: string; value: number; in
     >
       <div className="flex items-center justify-between">
         <span className="text-sm text-white/60">{label}</span>
-        <span className="text-sm font-medium text-[#2ABFAB]">{value}%</span>
+        <span className="text-sm font-medium text-[#ffffff]">{value}%</span>
       </div>
       <div className="h-2 bg-white/[0.08] rounded-full overflow-hidden relative">
         <motion.div
           style={{ width }}
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#2ABFAB] to-[#34d9c3] rounded-full"
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#ffffff] to-[#34d9c3] rounded-full"
         />
       </div>
     </motion.div>
@@ -47,7 +47,7 @@ export default function Stats() {
   return (
     <section className="bg-[#0f1115] text-white relative overflow-hidden">
       {/* Subtle gradient accent */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#2ABFAB]/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#ffffff]/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
       {/* Header */}
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 pt-28 md:pt-36 pb-16">
@@ -56,7 +56,7 @@ export default function Stats() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-[13px] font-medium uppercase tracking-widest text-[#2ABFAB] mb-6"
+          className="text-[13px] font-medium uppercase tracking-widest text-[#ffffff] mb-6"
         >
           {statsContent.sectionLabel}
         </motion.p>
@@ -96,7 +96,7 @@ export default function Stats() {
               viewport={{ once: true }}
               className="flex flex-col gap-2"
             >
-              <span className="text-[clamp(2.5rem,5vw,4rem)] font-bold tracking-tight text-[#2ABFAB]">
+              <span className="text-[clamp(2.5rem,5vw,4rem)] font-bold tracking-tight text-[#ffffff]">
                 {stat.value}
               </span>
               <span className="text-xs font-medium uppercase tracking-widest text-white/30">
@@ -119,8 +119,8 @@ export default function Stats() {
               viewport={{ once: true }}
               className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 hover:bg-white/[0.04] transition-colors"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#2ABFAB]/10 flex items-center justify-center mb-4">
-                <div className="w-2 h-2 rounded-full bg-[#2ABFAB]" />
+              <div className="w-8 h-8 rounded-lg bg-[#ffffff]/10 flex items-center justify-center mb-4">
+                <div className="w-2 h-2 rounded-full bg-[#ffffff]" />
               </div>
               <h3 className="text-sm font-semibold text-white mb-2">{cap.title}</h3>
               <p className="text-white/35 text-xs leading-relaxed">

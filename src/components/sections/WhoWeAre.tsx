@@ -106,7 +106,7 @@ export default function WhoWeAre() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center w-full">
               {/* Left: text */}
               <div data-text className="flex flex-col gap-4 md:gap-5">
-                <p className="text-[13px] font-medium uppercase tracking-widest text-[#2ABFAB]">
+                <p className="text-[13px] font-medium uppercase tracking-widest text-[#000000]">
                   Who We Are
                 </p>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-black">
@@ -117,7 +117,7 @@ export default function WhoWeAre() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-6 mt-2">
-                  <div className="flex flex-col gap-1 border-l-2 border-[#2ABFAB]/30 pl-4">
+                  <div className="flex flex-col gap-1 border-l-2 border-[#000000]/30 pl-4">
                     <span className="text-sm font-semibold text-black">Trusted Since 2000</span>
                     <span className="text-xs text-black/40">Petroleum Distribution</span>
                   </div>
@@ -125,7 +125,7 @@ export default function WhoWeAre() {
                     {["Lab-Tested Products", "Industry Expertise", "Optimized Logistics"].map((item) => (
                       <div key={item} className="flex items-center gap-2">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <circle cx="8" cy="8" r="8" fill="#2ABFAB" />
+                          <circle cx="8" cy="8" r="8" fill="#000000" />
                           <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         <span className="text-sm font-medium text-black/70">{item}</span>
@@ -136,7 +136,7 @@ export default function WhoWeAre() {
 
                 <a
                   href="#services"
-                  className="mt-4 inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#2ABFAB] text-white text-sm font-semibold hover:bg-[#24a999] transition-colors w-fit"
+                  className="mt-4 inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#000000] text-white text-sm font-semibold hover:bg-[#333333] transition-colors w-fit"
                 >
                   READ MORE
                 </a>

@@ -1,9 +1,58 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { heroContent } from "@/data/content";
+
+const typewriterWords = ["Industries", "Automotive", "Manufacturing", "Logistics", "Energy"];
+
+function TypewriterText() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const tick = useCallback(() => {
+    const currentWord = typewriterWords[wordIndex];
+
+    if (!isDeleting) {
+      // Typing
+      const next = currentWord.slice(0, displayed.length + 1);
+      setDisplayed(next);
+      if (next === currentWord) {
+        // Pause then start deleting
+        setTimeout(() => setIsDeleting(true), 2000);
+        return;
+      }
+    } else {
+      // Deleting
+      const next = currentWord.slice(0, displayed.length - 1);
+      setDisplayed(next);
+      if (next === "") {
+        setIsDeleting(false);
+        setWordIndex((prev) => (prev + 1) % typewriterWords.length);
+        return;
+      }
+    }
+  }, [displayed, isDeleting, wordIndex]);
+
+  useEffect(() => {
+    const speed = isDeleting ? 50 : 100;
+    const timer = setTimeout(tick, speed);
+    return () => clearTimeout(timer);
+  }, [tick, isDeleting]);
+
+  return (
+    <span>
+      {displayed}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-[3px] md:w-[5px] h-[0.85em] bg-[#ffffff] ml-1 align-baseline translate-y-[0.05em]"
+      />
+    </span>
+  );
+}
 
 export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -20,8 +69,8 @@ export default function Hero() {
   const textX3 = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
-  // Image parallax — moves down slower than scroll, stays visible
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  // BG image parallax
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   // Subtitle
   const subtitleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -31,29 +80,31 @@ export default function Hero() {
       id="home"
       ref={sectionRef}
       className="relative h-screen w-full overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(180deg, #d4f5ef 0%, #bfeee5 20%, #e8f9f5 50%, #f0ebe3 80%, #ece4d9 100%)",
-      }}
     >
-      {/* Oil image — right side, bottom-aligned, parallax up on scroll */}
+      {/* Background image with overlay */}
       <motion.div
-        style={{ y: imageY }}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-        className="absolute z-[5] right-0 sm:right-[5%] lg:right-[8%] bottom-0 pointer-events-none"
+        style={{ y: bgY }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%]"
       >
-        <div className="relative w-[160px] h-[40vh] sm:w-[280px] sm:h-[60vh] md:w-[400px] md:h-[75vh] lg:w-[500px] lg:h-[85vh]">
-          <Image
-            src="/images/hero-image.png"
-            alt="Premium petroleum oil"
-            fill
-            priority
-            sizes="(max-width: 640px) 200px, (max-width: 768px) 280px, (max-width: 1280px) 400px, 500px"
-            className="object-contain object-bottom drop-shadow-2xl"
-          />
-        </div>
+        <Image
+          src="/images/hero-bg.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+        {/* Grid lines overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.2]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
       </motion.div>
 
       {/* Text — all left-aligned, vertically centered, parallax on scroll */}
@@ -69,7 +120,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
           >
-            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-black/90">
+            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-white">
               The Engine 
             </h1>
           </motion.div>
@@ -81,21 +132,20 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
           >
-            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-black/90">
+            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-white">
               Behind
             </h1>
           </motion.div>
 
-          {/* "Industries" */}
+          {/* Typewriter line */}
           <motion.div
             style={{ x: textX3 }}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-            className="mt-4 md:mt-6"
           >
-            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-black/90">
-              Industries
+            <h1 className="text-[clamp(2.5rem,8vw,10rem)] font-bold leading-[1] tracking-tighter text-[#ffffff]">
+              <TypewriterText />
             </h1>
           </motion.div>
         </div>
@@ -110,8 +160,8 @@ export default function Hero() {
         className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-4 sm:left-6 md:left-10 z-10 max-w-[200px] sm:max-w-[280px] md:max-w-sm"
       >
         <div className="flex items-start gap-3">
-          <div className="w-px h-16 bg-black/20 flex-shrink-0 mt-1" />
-          <p className="text-black/40 text-sm md:text-base leading-relaxed">
+          <div className="w-px h-16 bg-white/20 flex-shrink-0 mt-1" />
+          <p className="text-white/50 text-sm md:text-base leading-relaxed">
             {heroContent.subtitle}
           </p>
         </div>

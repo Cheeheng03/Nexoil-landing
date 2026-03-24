@@ -74,7 +74,7 @@ export default function ContactCTA() {
             >
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#2ABFAB] text-white text-sm font-semibold hover:bg-[#24a999] transition-colors"
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/80 transition-colors"
               >
                 {ctaContent.cta}
               </a>

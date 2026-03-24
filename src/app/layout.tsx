@@ -14,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nexoil-landing.vercel.app"),
   title: "Nexoil Distribution Sdn Bhd — Malaysia's Leading Industrial Fuel Partner",
   description:
     "Nexoil Distribution Sdn Bhd powers Malaysia's industries with premium petroleum products, reliable logistics, and two decades of fuel distribution expertise.",
@@ -29,6 +30,21 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/nexoil-logo.png",
     apple: "/images/nexoil-logo.png",
+  },
+  openGraph: {
+    title: "Nexoil Distribution Sdn Bhd — Malaysia's Leading Industrial Fuel Partner",
+    description:
+      "Premium petroleum products, reliable logistics, and two decades of fuel distribution expertise.",
+    url: "https://nexoil-landing.vercel.app",
+    siteName: "Nexoil",
+    locale: "en_MY",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nexoil Distribution Sdn Bhd",
+    description:
+      "Premium petroleum products, reliable logistics, and two decades of fuel distribution expertise.",
   },
 };
 

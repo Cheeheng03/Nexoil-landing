@@ -27,7 +27,7 @@ function ServiceCard({
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 1, 0.5, 1] }}
       viewport={{ once: true, margin: "-50px" }}
-      className="flex flex-col border-b-2 border-[#2ABFAB] pb-6"
+      className="flex flex-col border-b-2 border-[#000000] pb-6"
     >
       {/* Image with parallax */}
       <div className="relative overflow-hidden rounded-lg aspect-[4/3] mb-6 group">
@@ -56,7 +56,7 @@ function ServiceCard({
       {/* CTA button */}
       <a
         href="#contact"
-        className="inline-flex items-center justify-center px-5 py-2.5 rounded bg-[#2ABFAB] text-white text-xs font-semibold uppercase tracking-wider hover:bg-[#24a999] transition-colors w-fit"
+        className="inline-flex items-center justify-center px-5 py-2.5 rounded bg-[#000000] text-white text-xs font-semibold uppercase tracking-wider hover:bg-[#333333] transition-colors w-fit"
       >
         View Detail
       </a>

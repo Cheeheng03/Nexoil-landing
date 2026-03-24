@@ -51,7 +51,7 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-[13px] font-medium tracking-wide uppercase text-black/50 transition-colors duration-300 hover:text-black"
+                className="text-[13px] font-medium tracking-wide uppercase text-white/60 transition-colors duration-300 hover:text-white"
               >
                 {link.label}
               </a>
@@ -60,14 +60,14 @@ export default function Navbar() {
 
           <a
             href="#contact"
-            className="hidden md:inline-flex items-center px-5 py-2 rounded-full text-[13px] font-semibold bg-black/80 text-white hover:bg-black transition-all duration-300"
+            className="hidden md:inline-flex items-center px-5 py-2 rounded-full text-[13px] font-semibold bg-white text-black hover:bg-white/90 transition-all duration-300"
           >
             Get in Touch
           </a>
 
           {/* Mobile hamburger for hero */}
           <button
-            className="md:hidden p-2 text-black/60"
+            className="md:hidden p-2 text-white/60"
             aria-label="Toggle menu"
             onClick={() => setHeroMenuOpen((v) => !v)}
           >
@@ -93,7 +93,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={handleNavClick}
-                className="px-3 py-3 text-[14px] font-medium text-black/60 rounded-lg transition-colors hover:text-black hover:bg-black/[0.04]"
+                className="px-3 py-3 text-[14px] font-medium text-white/60 rounded-lg transition-colors hover:text-white hover:bg-white/[0.06]"
               >
                 {link.label}
               </a>
@@ -101,7 +101,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={handleNavClick}
-              className="mt-2 inline-flex items-center justify-center px-5 py-2.5 rounded-full text-[13px] font-semibold bg-black/80 text-white hover:bg-black transition-colors"
+              className="mt-2 inline-flex items-center justify-center px-5 py-2.5 rounded-full text-[13px] font-semibold bg-white text-black hover:bg-white/90 transition-colors"
             >
               Get in Touch
             </a>

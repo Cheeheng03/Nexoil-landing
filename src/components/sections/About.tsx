@@ -75,7 +75,7 @@ export default function About() {
               viewport={{ once: true }}
               className="relative rounded-2xl overflow-hidden bg-[#f5f5f5] p-8 md:p-10 min-h-[200px] flex flex-col justify-end"
             >
-              <span className="text-[13px] font-medium uppercase tracking-widest text-[#2ABFAB] mb-2">
+              <span className="text-[13px] font-medium uppercase tracking-widest text-[#000000] mb-2">
                 {item.label}
               </span>
               <p className="text-black/60 text-sm md:text-base leading-relaxed max-w-md">
