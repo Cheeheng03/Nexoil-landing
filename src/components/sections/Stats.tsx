@@ -1,8 +1,56 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring, animate } from "motion/react";
+import { useRef, useEffect, useState } from "react";
 import { statsContent } from "@/data/content";
+
+function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const [displayed, setDisplayed] = useState(value);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    // Handle special cases
+    if (value === "24/7") {
+      const controls = animate(0, 24, {
+        duration: 1.5,
+        ease: [0.25, 1, 0.5, 1],
+        onUpdate(v) { setDisplayed(Math.round(v) + "/7"); },
+      });
+      return () => controls.stop();
+    }
+
+    if (value === "10K+") {
+      const controls = animate(0, 10, {
+        duration: 2,
+        ease: [0.25, 1, 0.5, 1],
+        onUpdate(v) { setDisplayed(Math.round(v * 10) / 10 + "K+"); },
+      });
+      return () => controls.stop();
+    }
+
+    // Parse the numeric part and suffix (e.g. "20+" -> 20, "+")
+    const match = value.match(/^([\d.]+)(.*)/);
+    if (!match) return;
+
+    const end = parseFloat(match[1]);
+    const suffix = match[2];
+
+    const controls = animate(0, end, {
+      duration: 2,
+      ease: [0.25, 1, 0.5, 1],
+      onUpdate(v) {
+        setDisplayed(Math.round(v) + suffix);
+      },
+    });
+
+    return () => controls.stop();
+  }, [inView, value]);
+
+  return <span ref={ref}>{displayed}</span>;
+}
 
 const barData = [
   { label: "Product Consistency Rating", value: 98 },
@@ -48,6 +96,16 @@ export default function Stats() {
     <section className="bg-[#0f1115] text-white relative overflow-hidden">
       {/* Subtle gradient accent */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#ffffff]/[0.03] rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Grid lines overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.12] pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
 
       {/* Header */}
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 pt-28 md:pt-36 pb-16">
@@ -97,7 +155,7 @@ export default function Stats() {
               className="flex flex-col gap-2"
             >
               <span className="text-[clamp(2.5rem,5vw,4rem)] font-bold tracking-tight text-[#ffffff]">
-                {stat.value}
+                {i < 3 ? <CountUp value={stat.value} /> : stat.value}
               </span>
               <span className="text-xs font-medium uppercase tracking-widest text-white/30">
                 {stat.label}
