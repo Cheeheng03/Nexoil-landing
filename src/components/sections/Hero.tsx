@@ -70,7 +70,8 @@ export default function Hero() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   // BG image parallax
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "15%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   // Subtitle
   const subtitleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
@@ -83,8 +84,8 @@ export default function Hero() {
     >
       {/* Background image with overlay */}
       <motion.div
-        style={{ y: bgY }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%]"
+        style={{ y: bgY, scale: bgScale }}
+        className="absolute inset-0 w-full h-[130%] -top-[15%]"
       >
         <Image
           src="/images/hero-bg.jpg"
