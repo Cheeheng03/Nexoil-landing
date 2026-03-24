@@ -111,7 +111,7 @@ export default function Navbar() {
 
       {/* ===== FLOATING PILL NAVBAR — appears after scrolling past hero ===== */}
       <div
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
+        className={`fixed top-4 left-1/2 -translate-x-1/2 md:left-1/2 md:-translate-x-1/2 max-md:left-auto max-md:translate-x-0 max-md:right-4 z-[100] transition-all duration-500 ${
           scrolled
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-6 pointer-events-none"
@@ -196,7 +196,7 @@ export default function Navbar() {
             }}
           >
             <div className="overflow-hidden">
-              <div className="border-t border-black/[0.06] mx-3 pt-3 pb-3 flex flex-col gap-1">
+              <div className="border-t border-black/[0.06] mx-3 pt-3 pb-3 flex flex-col gap-1 items-end text-right">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
@@ -210,7 +210,7 @@ export default function Navbar() {
                 <a
                   href="#contact"
                   onClick={handleNavClick}
-                  className="mt-1 mx-3 inline-flex items-center justify-center px-4 py-2.5 rounded-full text-[12px] font-semibold bg-[#0f1115] text-white hover:bg-black transition-colors duration-300"
+                  className="mt-1 inline-flex items-center justify-center px-4 py-2.5 rounded-full text-[12px] font-semibold bg-[#0f1115] text-white hover:bg-black transition-colors duration-300"
                 >
                   Get in Touch
                 </a>
