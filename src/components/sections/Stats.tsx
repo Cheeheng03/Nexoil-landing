@@ -91,10 +91,23 @@ function AnimatedBar({ label, value, index }: { label: string; value: number; in
 
 const CURSOR_SIZE = 120;
 
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isDesktop;
+}
+
 function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | null> }) {
   const mouseX = useMotionValue(-999);
   const mouseY = useMotionValue(-999);
   const [visible, setVisible] = useState(false);
+  const isDesktop = useIsDesktop();
 
   const x = useSpring(mouseX, { stiffness: 500, damping: 40, mass: 0.3 });
   const y = useSpring(mouseY, { stiffness: 500, damping: 40, mass: 0.3 });
@@ -172,6 +185,8 @@ function XrayCursor({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | 
     ([cx, cy]: number[]) => `circle(${CURSOR_SIZE / 2}px at ${cx}px ${cy}px)`
   );
 
+  if (!isDesktop) return null;
+
   return (
     <motion.div
       className="absolute inset-0 z-30 pointer-events-none"
@@ -248,7 +263,7 @@ export default function Stats() {
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
-    <section ref={sectionRef} className="bg-[#0f1115] text-white relative overflow-hidden cursor-none">
+    <section ref={sectionRef} className="bg-[#0f1115] text-white relative overflow-hidden lg:cursor-none">
       {/* X-ray cursor */}
       <XrayCursor sectionRef={sectionRef} />
 
