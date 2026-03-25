@@ -39,6 +39,14 @@ export const metadata: Metadata = {
     siteName: "Nexoil",
     locale: "en_MY",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Nexoil Distribution Sdn Bhd — Malaysia's Leading Industrial Fuel Partner",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
